@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once '../classes/Database.php';
-require_once '../classes/Utilisateur.php';
-require_once '../classes/Administrateur.php';
-require_once '../classes/Enseignant.php';
-require_once '../classes/Etudiant.php';
-require_once '../classes/Role.php';
+require_once '../../Models/Database.php';
+require_once '../../Models/Utilisateur.php';
+require_once '../../Models/Administrateur.php';
+require_once '../../Models/Enseignant.php';
+require_once '../../Models/Etudiant.php';
+require_once '../../Models/Role.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = htmlspecialchars(trim($_POST['name']));
@@ -277,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </svg>
                     <span class="text-xl font-bold text-white">Youdemy</span>
                 </div>
-                <p class="text-gray-500 text-sm">© 2024 Youdemy. All rights reserved.</p>
+                <p class="text-gray-500 text-sm">© 2025 Youdemy. All rights reserved.</p>
             </div>
         </div>
     </footer>

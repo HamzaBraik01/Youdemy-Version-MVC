@@ -1,6 +1,7 @@
 <?php
 require_once 'Role.php';
 require_once 'Database.php';
+
 abstract class Utilisateur {
     protected int $id;
     protected string $nom;
@@ -78,7 +79,7 @@ abstract class Utilisateur {
             'id' => $this->id,
             'nom' => $this->nom,
             'email' => $this->email,
-            'role' => $this->role->getRole(), 
+            'role' => $this->role->getRole(),
             'status' => $this->status
         ];
 
@@ -91,37 +92,33 @@ abstract class Utilisateur {
         }
 
         unset($_SESSION['user']);
-
         session_destroy();
-
-
     }
 
     abstract public function register(): void;
 
     protected function save(): void {
         $db = Database::getInstance()->getConnection();
-    
+
         // Hachage sécurisé du mot de passe
         $motDePasseHash = password_hash($this->motDePasse, PASSWORD_BCRYPT);
         $roleId = $this->role->getId();
-    
+
         $stmt = $db->prepare("
             INSERT INTO Utilisateur (nom, email, motDePasse, role_id, status) 
             VALUES (:nom, :email, :motDePasse, :role_id, :status)
         ");
-    
+
         $stmt->bindParam(':nom', $this->nom);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':motDePasse', $motDePasseHash);
         $stmt->bindParam(':role_id', $roleId);
         $stmt->bindParam(':status', $this->status);
-    
+
         $stmt->execute();
-    
+
         $this->id = $db->lastInsertId();
     }
-    
 
     protected function redirigerUtilisateur(): void {
         // Vérifier si l'utilisateur est un enseignant et que son statut est "en attente"
@@ -139,14 +136,14 @@ abstract class Utilisateur {
                 if ($this->status === 'active') {
                     header('Location: ../views/teacher/dashboard.php');
                 } else {
-                    header('Location: ../public/login.php');
+                    header('Location: ../user/login.php');
                 }
                 break;
             case 'Etudiant':
                 header('Location: ../views/student/dashboard.php');
                 break;
             default:
-                header('Location: ../public/login.php');
+                header('Location: ../user/login.php');
                 break;
         }
         exit();
